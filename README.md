@@ -27,3 +27,7 @@
 - npm i prettier -D
 - npm i eslint-config-prettier -D
 - .prettierrc
+
+#### criar .env com:
+
+- MONGO_URL
