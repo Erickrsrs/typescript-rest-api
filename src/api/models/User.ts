@@ -41,7 +41,9 @@ userSchema.plugin(uniqueValidator, { message: 'Email to be unique' });
 
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
-  this.password = await bcryptjs.hash(this.password, 8);
+  if (this.password) {
+    this.password = await bcryptjs.hash(this.password, 8);
+  }
   return next();
 });
 
