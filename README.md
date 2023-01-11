@@ -31,3 +31,38 @@
 #### criar .env com:
 
 - MONGO_URL
+
+#### to validade password
+
+```
+studentSchema.methods.validatePassword = async function (
+pass: string,
+cb: any,
+) {
+bcryptjs.compare(pass, this.password, function (err, isMatch) {
+if (err) return cb(err);
+cb(null, isMatch);
+});
+};
+
+Student.findOne(
+{ completeName: 'ricky' },
+function (err: Error, user: IStudent) {
+user.validatePassword('123123', function (err: any, isMatch: any) {
+console.log('123123', isMatch);
+});
+
+user.validatePassword('sla', function (err: any, isMatch: any) {
+console.log('sla', isMatch);
+});
+},
+);
+```
+
+#### controller methods:
+
+- index: lista todos os usuários -> GET
+- store/create: cria um novo usuário -> POST
+- delete: apaga um usuário -> DELETE
+- show: mostra um usuário -> GET
+- update: atualiza um usuário -> PATCH ou PUT

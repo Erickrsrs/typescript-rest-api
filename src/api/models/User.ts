@@ -3,19 +3,18 @@ import { Schema, model } from 'mongoose';
 import isEmail from 'validator/lib/isEmail';
 import bcryptjs from 'bcryptjs';
 
-export interface IStudent {
+export interface IUser {
   completeName: string;
   email: string;
-  age: number;
   password: string;
 }
 
-const studentSchema = new Schema<IStudent>(
+const userSchema = new Schema<IUser>(
   {
     completeName: {
       type: String,
       required: [true, 'Name is required'],
-      minlength: [3, 'Name must be at least 3 characters'],
+      minlength: [3, 'Name must be 3 or more characters'],
       maxlength: [46, 'Name must be a maximum of 46 characters'],
     },
     email: {
@@ -25,11 +24,10 @@ const studentSchema = new Schema<IStudent>(
       required: [true, 'Email is required'],
       validate: [isEmail, 'Email invalid'],
     },
-    age: { type: Number, required: [true, 'Age is required'] },
     password: {
       type: String,
       required: [true, 'Password is required'],
-      minlength: [6, 'Password must be at least 6 characters'],
+      minlength: [6, 'Password must be 3 or more characters'],
       maxlength: [46, 'Password must be a maximum of 46 characters'],
     },
   },
@@ -39,12 +37,12 @@ const studentSchema = new Schema<IStudent>(
   },
 );
 
-studentSchema.plugin(uniqueValidator, { message: 'Email to be unique' });
+userSchema.plugin(uniqueValidator, { message: 'Email to be unique' });
 
-studentSchema.pre('save', async function (next) {
+userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   this.password = await bcryptjs.hash(this.password, 8);
   return next();
 });
 
-export const Student = model<IStudent>('Student', studentSchema);
+export const User = model<IUser>('User', userSchema);
