@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { User } from '../models/User';
 
 interface IData {
   id: string;
@@ -8,7 +9,7 @@ interface IData {
   exp: number;
 }
 
-export default (req: Request, res: Response, next: NextFunction) => {
+export default async (req: Request, res: Response, next: NextFunction) => {
   const { authorization } = req.headers;
 
   if (!authorization) return res.status(401).json('Login required');
@@ -18,6 +19,11 @@ export default (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = jwt.verify(token, process.env.TOKEN_SECRET as string) as IData;
     const { id, email } = data;
+    const userExists = await User.findOne({ _id: id, email });
+
+    if (!userExists) {
+      return res.status(401).json('Invalid User');
+    }
     req.userId = id;
     req.userEmail = email;
     return next();

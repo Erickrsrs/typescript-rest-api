@@ -6,7 +6,8 @@ class UserController {
   static async create(req: Request, res: Response) {
     try {
       const newUser = await User.create(req.body);
-      return res.json(newUser);
+      const { id, completeName, email } = newUser;
+      return res.json({ id, completeName, email });
     } catch (err) {
       if (err instanceof Error.ValidationError) {
         return res.status(400).json(err.message);
@@ -15,7 +16,7 @@ class UserController {
       }
     }
   }
-
+  //TODO: remove this route
   static async index(req: Request, res: Response) {
     try {
       const users = await User.find().select('id completeName email');
@@ -28,9 +29,7 @@ class UserController {
   static async show(req: Request, res: Response) {
     try {
       const user = await User.findById(req.params.id);
-      if (!user) {
-        return res.status(401).json('User does not exist');
-      }
+      if (!user) return res.status(401).json('User does not exist');
       const { id, completeName, email } = user;
       return res.json({ id, completeName, email });
     } catch (err) {
@@ -40,12 +39,12 @@ class UserController {
 
   static async update(req: Request, res: Response) {
     try {
-      const user = await User.findById(req.userId);
-      if (!user) {
-        return res.status(400).json('User not found');
-      }
-      await user.updateOne(req.body);
-      return res.json(user);
+      const user = await User.findByIdAndUpdate(req.userId, req.body, {
+        new: true,
+      });
+      if (!user) return res.status(401).json('User does not exist');
+      const { id, completeName, email } = user;
+      return res.json({ id, completeName, email });
     } catch (err) {
       if (err instanceof Error.ValidationError) {
         return res.status(400).json(err.message);
@@ -57,11 +56,7 @@ class UserController {
 
   static async delete(req: Request, res: Response) {
     try {
-      const user = await User.findById(req.params.id);
-      if (!user) {
-        return res.status(400).json('User not found');
-      }
-      await user.deleteOne();
+      await User.findByIdAndRemove(req.userId);
       return res.json('User deleted successfully');
     } catch (err) {
       if (err instanceof Error.ValidationError) {
