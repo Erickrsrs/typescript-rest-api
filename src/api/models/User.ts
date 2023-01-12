@@ -3,10 +3,11 @@ import { Schema, model } from 'mongoose';
 import isEmail from 'validator/lib/isEmail';
 import bcryptjs from 'bcryptjs';
 
-export interface IUser {
+interface IUser {
   completeName: string;
   email: string;
   password: string;
+  validatePassword: (pass: string) => boolean;
 }
 
 const userSchema = new Schema<IUser>(
@@ -46,5 +47,9 @@ userSchema.pre('save', async function (next) {
   }
   return next();
 });
+
+userSchema.methods.validatePassword = async function (pass: string) {
+  return bcryptjs.compare(pass, this.password);
+};
 
 export const User = model<IUser>('User', userSchema);

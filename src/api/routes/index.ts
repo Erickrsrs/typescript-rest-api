@@ -1,5 +1,6 @@
 import express from 'express';
 import { Request, Response, Express } from 'express';
+import token from './token';
 import user from './user';
 import student from './student';
 
@@ -9,6 +10,7 @@ const routes = (app: Express) => {
   });
 
   app.use(express.json());
+  app.use('/token/', token);
   app.use('/users/', user);
   app.use('/students/', student);
 };
