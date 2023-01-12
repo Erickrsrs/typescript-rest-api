@@ -4,10 +4,15 @@ import loginRequired from '../middlewares/loginRequired';
 
 const router = Router();
 
+//this method should not exist
+router.get('/', UserController.index);
+
 router.post('/', UserController.create);
-router.get('/', loginRequired, UserController.index);
 router.get('/:id', UserController.show);
-router.put('/:id', UserController.update);
-router.delete('/:id', UserController.delete);
+
+//a user can only update their own account
+router.put('/', loginRequired, UserController.update);
+//a user can only delete their own account
+router.delete('/', loginRequired, UserController.delete);
 
 export default router;
