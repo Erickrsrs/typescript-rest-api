@@ -3,7 +3,7 @@ import { Schema, model } from 'mongoose';
 import isEmail from 'validator/lib/isEmail';
 import bcryptjs from 'bcryptjs';
 
-export interface IStudent {
+interface IStudent {
   completeName: string;
   email: string;
   age: number;
