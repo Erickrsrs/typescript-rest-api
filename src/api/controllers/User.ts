@@ -56,14 +56,11 @@ class UserController {
 
   static async delete(req: Request, res: Response) {
     try {
-      await User.findByIdAndRemove(req.userId);
+      const user = await User.findByIdAndRemove(req.userId);
+      if (!user) return res.status(401).json('User does not exist');
       return res.json('User deleted successfully');
     } catch (err) {
-      if (err instanceof Error.ValidationError) {
-        return res.status(400).json(err.message);
-      } else {
-        return res.status(400).json(err);
-      }
+      return res.status(400).json('User not found');
     }
   }
 }
