@@ -19,8 +19,16 @@ class StudentController {
 
   static async index(req: Request, res: Response) {
     try {
-      const students = await Student.find().select('id completeName email age');
-      return res.json(students);
+      Student.find()
+        .select('id completeName email age photos')
+        .populate({
+          path: 'photos',
+          select: ['url', 'originalname', 'filename'],
+          options: { sort: { created_at: 'desc' } },
+        })
+        .exec((err, photos) => {
+          return res.json(photos);
+        });
     } catch (err) {
       return res.status(500).json('Something is wrong');
     }
@@ -30,8 +38,8 @@ class StudentController {
     try {
       const student = await Student.findById(req.params.id);
       if (!student) return res.status(401).json('Student does not exist');
-      const { id, completeName, email, age } = student;
-      return res.json({ id, completeName, email, age });
+      const { id, completeName, email, age, photos } = student;
+      return res.json({ id, completeName, email, age, photos });
     } catch (err) {
       return res.status(400).json('Student not found');
     }

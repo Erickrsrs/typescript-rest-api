@@ -6,12 +6,12 @@ import fs from 'fs';
 const randomNameComplement = () => Math.floor(Math.random() * 10000 + 10000);
 
 const createUploadsDir = () => {
-  const folderName = resolve(__dirname, '..', '..', 'uploads');
+  const folderName = resolve(__dirname, '..', '..', 'uploads', 'images');
   try {
-    if (!fs.existsSync(folderName)) fs.mkdirSync(folderName);
+    fs.mkdirSync(folderName, { recursive: true });
   } catch (err) {
     return console.error(
-      'Unable to create "uploads" directory, please create it so photos can be stored.',
+      'Unable to create "uploads/images" directory, please create it so photos can be stored.',
       err,
     );
   }
@@ -35,7 +35,7 @@ export default {
   },
   storage: multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, resolve(__dirname, '..', '..', 'uploads'));
+      cb(null, resolve(__dirname, '..', '..', 'uploads', 'images'));
     },
     filename: (req, file, cb) => {
       createUploadsDir(),

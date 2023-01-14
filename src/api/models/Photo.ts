@@ -1,12 +1,12 @@
-import mongoose, { Schema, model } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 interface IPhoto {
   originalname: string;
   filename: string;
-  studentId: mongoose.Schema.Types.ObjectId;
+  studentId: Schema.Types.ObjectId;
 }
 
-const photo = new Schema<IPhoto>(
+const photoSchema = new Schema<IPhoto>(
   {
     originalname: {
       type: String,
@@ -17,15 +17,20 @@ const photo = new Schema<IPhoto>(
       required: true,
     },
     studentId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'students',
+      type: Schema.Types.ObjectId,
+      ref: 'Student',
       required: true,
     },
   },
   {
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
     versionKey: false,
+    toJSON: { virtuals: true },
   },
 );
 
-export const Photo = model<IPhoto>('Photo', photo);
+photoSchema.virtual('url').get(function () {
+  return 'http://localhost:3000/images/' + this.filename;
+});
+
+export const Photo = model<IPhoto>('Photo', photoSchema);

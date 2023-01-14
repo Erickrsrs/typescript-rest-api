@@ -1,5 +1,5 @@
 import uniqueValidator from 'mongoose-unique-validator';
-import { Schema, model } from 'mongoose';
+import { Schema, model, Types } from 'mongoose';
 import isEmail from 'validator/lib/isEmail';
 import bcryptjs from 'bcryptjs';
 
@@ -8,6 +8,7 @@ interface IStudent {
   email: string;
   age: number;
   password: string;
+  photos: [{ _id: Types.ObjectId }];
 }
 
 const studentSchema = new Schema<IStudent>(
@@ -30,8 +31,16 @@ const studentSchema = new Schema<IStudent>(
       type: String,
       required: [true, 'Password is required'],
       minlength: [6, 'Password must be at least 6 characters'],
-      maxlength: [46, 'Password must be a maximum of 46 characters'],
+      maxlength: [146, 'Password must be a maximum of 146 characters'],
     },
+    photos: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Photo',
+        required: false,
+        default: '',
+      },
+    ],
   },
   {
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
