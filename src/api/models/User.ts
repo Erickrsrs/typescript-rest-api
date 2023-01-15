@@ -1,35 +1,33 @@
+import { Document, Schema, Model, model } from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
-import { Schema, model } from 'mongoose';
 import isEmail from 'validator/lib/isEmail';
 import bcryptjs from 'bcryptjs';
 
-interface IUser {
+interface IUser extends Document {
   completeName: string;
   email: string;
   password: string;
   validatePassword: (pass: string) => boolean;
 }
 
-const userSchema = new Schema<IUser>(
+const UserSchema = new Schema<IUser>(
   {
     completeName: {
       type: String,
-      required: [true, 'Name is required'],
-      minlength: [3, 'Name must be 3 or more characters'],
-      maxlength: [46, 'Name must be a maximum of 46 characters'],
+      required: [true, 'is required'],
+      minlength: [3, 'must be at least 3 characters'],
     },
     email: {
       type: String,
+      required: [true, 'is required'],
       index: true,
       unique: true,
-      required: [true, 'Email is required'],
-      validate: [isEmail, 'Email invalid'],
+      validate: [isEmail, 'invalid'],
     },
     password: {
       type: String,
-      required: [true, 'Password is required'],
-      minlength: [6, 'Password must be 3 or more characters'],
-      maxlength: [46, 'Password must be a maximum of 46 characters'],
+      required: [true, 'is required'],
+      minlength: [6, 'must be at least 6 characters'],
     },
   },
   {
@@ -38,9 +36,9 @@ const userSchema = new Schema<IUser>(
   },
 );
 
-userSchema.plugin(uniqueValidator, { message: 'Email to be unique' });
+UserSchema.plugin(uniqueValidator, { message: 'to be unique' });
 
-userSchema.pre('save', async function (next) {
+UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   if (this.password) {
     this.password = await bcryptjs.hash(this.password, 8);
@@ -48,8 +46,8 @@ userSchema.pre('save', async function (next) {
   return next();
 });
 
-userSchema.methods.validatePassword = async function (pass: string) {
+UserSchema.methods.validatePassword = async function (pass: string) {
   return bcryptjs.compare(pass, this.password);
 };
 
-export const User = model<IUser>('User', userSchema);
+export const User: Model<IUser> = model<IUser>('User', UserSchema);

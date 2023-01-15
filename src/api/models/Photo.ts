@@ -1,12 +1,12 @@
-import { Schema, model } from 'mongoose';
+import { Document, Schema, Model, model } from 'mongoose';
 
-interface IPhoto {
+interface IPhoto extends Document {
   originalname: string;
   filename: string;
   studentId: Schema.Types.ObjectId;
 }
 
-const photoSchema = new Schema<IPhoto>(
+const PhotoSchema = new Schema<IPhoto>(
   {
     originalname: {
       type: String,
@@ -29,8 +29,8 @@ const photoSchema = new Schema<IPhoto>(
   },
 );
 
-photoSchema.virtual('url').get(function () {
+PhotoSchema.virtual('url').get(function () {
   return 'http://localhost:3000/images/' + this.filename;
 });
 
-export const Photo = model<IPhoto>('Photo', photoSchema);
+export const Photo: Model<IPhoto> = model<IPhoto>('Photo', PhotoSchema);

@@ -1,9 +1,9 @@
+import { Document, Schema, Model, Types, model } from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
-import { Schema, model, Types } from 'mongoose';
 import isEmail from 'validator/lib/isEmail';
 import bcryptjs from 'bcryptjs';
 
-interface IStudent {
+interface IStudent extends Document {
   completeName: string;
   email: string;
   age: number;
@@ -11,33 +11,34 @@ interface IStudent {
   photos: [{ _id: Types.ObjectId }];
 }
 
-const studentSchema = new Schema<IStudent>(
+const StudentSchema = new Schema<IStudent>(
   {
     completeName: {
       type: String,
-      required: [true, 'Name is required'],
-      minlength: [3, 'Name must be at least 3 characters'],
-      maxlength: [46, 'Name must be a maximum of 46 characters'],
+      required: [true, 'is required'],
+      minlength: [3, 'must be at least 3 characters'],
     },
     email: {
       type: String,
+      required: [true, 'is required'],
       index: true,
       unique: true,
-      required: [true, 'Email is required'],
-      validate: [isEmail, 'Email invalid'],
+      validate: [isEmail, 'invalid'],
     },
-    age: { type: Number, required: [true, 'Age is required'] },
+    age: {
+      type: Number,
+      required: [true, 'is required'],
+    },
     password: {
       type: String,
-      required: [true, 'Password is required'],
-      minlength: [6, 'Password must be at least 6 characters'],
-      maxlength: [146, 'Password must be a maximum of 146 characters'],
+      required: [true, 'is required'],
+      minlength: [6, 'must be at least 6 characters'],
     },
     photos: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'Photo',
         required: false,
+        ref: 'Photo',
         default: '',
       },
     ],
@@ -48,12 +49,15 @@ const studentSchema = new Schema<IStudent>(
   },
 );
 
-studentSchema.plugin(uniqueValidator, { message: 'Email to be unique' });
+StudentSchema.plugin(uniqueValidator, { message: 'Email to be unique' });
 
-studentSchema.pre('save', async function (next) {
+StudentSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   this.password = await bcryptjs.hash(this.password, 8);
   return next();
 });
 
-export const Student = model<IStudent>('Student', studentSchema);
+export const Student: Model<IStudent> = model<IStudent>(
+  'Student',
+  StudentSchema,
+);
