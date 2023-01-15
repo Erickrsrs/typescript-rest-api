@@ -4,8 +4,6 @@ import loginRequired from '../middlewares/loginRequired';
 
 const router = Router();
 
-//TODO: middlewares to update photo references on the changes in students... (update and delete)
-
 router.get('/', StudentController.index);
 router.post('/', loginRequired, StudentController.create);
 router.get('/:id', StudentController.show);
