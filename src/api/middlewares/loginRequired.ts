@@ -11,9 +11,7 @@ interface IData {
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   const { authorization } = req.headers;
-
-  if (!authorization) return res.status(401).json('Login required');
-
+  if (!authorization) return res.status(401).json({ Error: 'Login required' });
   const [, token] = authorization.split(' ');
 
   try {
@@ -22,12 +20,12 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     const userExists = await User.findOne({ _id: id, email });
 
     if (!userExists) {
-      return res.status(401).json('Invalid User');
+      return res.status(401).json({ Error: 'Invalid User' });
     }
     req.userId = id;
     req.userEmail = email;
     return next();
   } catch (err) {
-    return res.status(401).json('Invalid token');
+    return res.status(401).json({ Error: 'Invalid token' });
   }
 };

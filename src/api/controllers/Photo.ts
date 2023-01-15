@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { Error } from 'mongoose';
 import multer from 'multer';
 import multerConfig from '../../config/multerConfig';
 import { Photo } from '../models/Photo';
@@ -9,8 +10,8 @@ const upload = multer(multerConfig).single('photo');
 class PhotoController {
   static create(req: Request, res: Response) {
     return upload(req, res, async err => {
-      if (err) return res.status(400).json(err.field);
-      if (!req.file) return res.status(400).json('File not found');
+      if (err) return res.status(400).json({ Error: err.field });
+      if (!req.file) return res.status(400).json({ Error: 'File not found' });
       try {
         const { originalname, filename } = req.file;
         const { studentId } = req.body;
@@ -20,9 +21,16 @@ class PhotoController {
         student?.photos.push(photo);
         await student?.save();
 
-        return res.json(photo);
+        return res.json({
+          message: 'Photo created successfully',
+          photo: photo,
+        });
       } catch (err) {
-        return res.status(400).json(err);
+        if (err instanceof Error.ValidationError) {
+          return res.status(400).json({ Error: err.message });
+        } else {
+          return res.status(400).json({ Error: err });
+        }
       }
     });
   }
@@ -30,9 +38,9 @@ class PhotoController {
   static async index(req: Request, res: Response) {
     try {
       const photos = await Photo.find().sort({ created_at: 'desc' });
-      return res.json(photos);
+      return res.json({ photos });
     } catch (err) {
-      return res.status(500).json('Something is wrong');
+      return res.status(500).json({ Error: 'Something went wrong' });
     }
   }
 }

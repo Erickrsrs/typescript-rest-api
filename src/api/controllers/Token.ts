@@ -7,14 +7,14 @@ class TokenController {
     try {
       const { email, password } = req.body;
       if (!email || !password) {
-        return res.status(401).json('Invalid credentials');
+        return res.status(401).json({ Error: 'Invalid credentials' });
       }
       const user = await User.findOne({ email: email });
       if (!user) {
-        return res.status(401).json('User does not exist');
+        return res.status(401).json({ Error: 'User does not exist' });
       }
       if (!(await user.validatePassword(password))) {
-        return res.status(401).json('Invalid password');
+        return res.status(401).json({ Error: 'Invalid password' });
       }
       const { id } = user;
       const token = jwt.sign(
@@ -26,7 +26,7 @@ class TokenController {
       );
       return res.json({ token });
     } catch (err) {
-      return res.status(400).json(err);
+      return res.status(401).json({ Error: err });
     }
   }
 }
