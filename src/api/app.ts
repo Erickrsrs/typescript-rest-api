@@ -1,11 +1,11 @@
 import express from 'express';
 import { resolve } from 'path';
 import routes from './routes/index';
-import db from '../config/dbConnect';
+import mongoDB from '../config/mongoConfig';
 
-db.on('error', console.log.bind(console, 'Erro de conexão'));
-db.once('open', () => {
-  console.log('Connected to Database');
+mongoDB.on('error', console.log.bind(console, 'MongoDB connection error'));
+mongoDB.once('open', () => {
+  console.log('Connected to MongoDB');
 });
 
 const app = express();
