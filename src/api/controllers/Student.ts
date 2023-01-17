@@ -87,7 +87,7 @@ class StudentController {
       const { id, completeName, email, age } = student;
       await Photo.deleteMany({ studentId: req.params.id });
       return res.json({
-        message: 'User deleted successfully',
+        message: 'Student deleted successfully',
         student: { id, completeName, email, age },
       });
     } catch (err) {
