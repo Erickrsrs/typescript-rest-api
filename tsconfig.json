@@ -5,7 +5,6 @@
     "outDir": "./dist",
     "removeComments": true,
     "noEmitOnError": true,
-    "rootDir": "src",
     "strict": true,
     "allowJs": true,
     "noImplicitAny": true,
