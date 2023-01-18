@@ -6,9 +6,9 @@
   "scripts": {
     "build": "npx tsc",
     "dev": "npx nodemon",
-    "test": "jest --noStackTrace --detectOpenHandles --forceExit",
-    "test-watch": "jest --watchAll --silent --noStackTrace --detectOpenHandles",
-    "test-coverage": "jest --silent --noStackTrace --coverage --detectOpenHandles"
+    "test": "jest --forceExit --detectOpenHandles",
+    "test-watch": "jest --watchAll --detectOpenHandles",
+    "test-coverage": "jest --coverage --forceExit --detectOpenHandles"
   },
   "keywords": [],
   "author": "",
