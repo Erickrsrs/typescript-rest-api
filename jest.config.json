@@ -4,5 +4,6 @@
   "verbose": true,
   "transform": {
     "^.+\\.tsx?$": "ts-jest"
-  }
+  },
+  "modulePathIgnorePatterns": ["utils"]
 }
