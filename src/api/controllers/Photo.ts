@@ -37,7 +37,9 @@ class PhotoController {
 
   static async index(req: Request, res: Response) {
     try {
-      const photos = await Photo.find().sort({ created_at: 'desc' });
+      const photos = await Photo.find()
+        .select('id originalname filename studentId')
+        .sort({ created_at: 'desc' });
       return res.json({ photos });
     } catch (err) {
       return res.status(500).json({ Error: 'Something went wrong' });

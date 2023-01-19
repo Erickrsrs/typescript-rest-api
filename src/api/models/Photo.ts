@@ -1,6 +1,7 @@
 import { Document, Schema, Model, model } from 'mongoose';
 
 interface IPhoto extends Document {
+  id: boolean;
   originalname: string;
   filename: string;
   studentId: Schema.Types.ObjectId;
@@ -8,6 +9,7 @@ interface IPhoto extends Document {
 
 const PhotoSchema = new Schema<IPhoto>(
   {
+    id: false, // because it was being duplicated
     originalname: {
       type: String,
       required: true,
