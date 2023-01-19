@@ -5,6 +5,28 @@ import { Student } from '../../src/api/models/Student';
 loginRequiredMock(); // set middleware mock before app instance
 import app from '../../src/api/app';
 
+const studentPayload = {
+  completeName: 'John Doe',
+  email: 'johnDoe@email.com',
+  age: 144,
+  password: '123123',
+};
+
+const studentVerify = {
+  _id: expect.any(String),
+  completeName: 'John Doe',
+  email: 'johnDoe@email.com',
+  age: 144,
+  photos: [],
+};
+
+const studentUpdated = {
+  id: expect.any(String),
+  completeName: 'John Doe updated',
+  email: 'johnDoe@email.com',
+  age: 144,
+};
+
 describe('student', () => {
   beforeAll(async () => {
     await connectDB();
@@ -14,12 +36,7 @@ describe('student', () => {
   });
 
   it('should return a message and create a student', async () => {
-    const res = await request(app).post('/students/').send({
-      completeName: 'John Doe',
-      email: 'johnDoe@email.com',
-      age: 144,
-      password: '123123',
-    });
+    const res = await request(app).post('/students/').send(studentPayload);
     expect(res.statusCode).toBe(200);
     expect(res.body).toHaveProperty('message', 'Student created successfully');
   });
@@ -28,15 +45,7 @@ describe('student', () => {
     const res = await request(app).get('/students/');
     expect(res.statusCode).toBe(200);
     expect(res.body).toEqual({
-      students: [
-        {
-          _id: expect.any(String),
-          completeName: 'John Doe',
-          email: 'johnDoe@email.com',
-          age: 144,
-          photos: [],
-        },
-      ],
+      students: [studentVerify],
     });
   });
 
@@ -46,13 +55,7 @@ describe('student', () => {
     const res = await request(app).get(`/students/${id}`);
     expect(res.statusCode).toBe(200);
     expect(res.body).toEqual({
-      student: {
-        _id: expect.any(String),
-        completeName: 'John Doe',
-        email: 'johnDoe@email.com',
-        age: 144,
-        photos: [],
-      },
+      student: studentVerify,
     });
   });
 
@@ -64,12 +67,7 @@ describe('student', () => {
     });
     expect(res.statusCode).toBe(200);
     expect(res.body).toEqual({
-      student: {
-        id: expect.any(String),
-        completeName: 'John Doe updated',
-        email: 'johnDoe@email.com',
-        age: 144,
-      },
+      student: studentUpdated,
     });
   });
 
