@@ -33,8 +33,8 @@ class UserController {
     try {
       const user = await User.findById(req.params.id);
       if (!user) return res.status(400).json({ Error: 'User does not exist' });
-      const { id, completeName, email } = user;
-      return res.json({ user: { id, completeName, email } });
+      const { _id, completeName, email } = user;
+      return res.json({ user: { _id, completeName, email } });
     } catch (err) {
       return res.status(400).json({ Error: 'User not found' });
     }
