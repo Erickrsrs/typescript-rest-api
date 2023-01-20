@@ -25,7 +25,6 @@ describe('index', () => {
     const res = await request(app)
       .post('/token/')
       .send({ email: user?.email, password: userPayload.password });
-    console.log(res.body);
     expect(res.statusCode).toBe(200);
     expect(res.body).toEqual({
       token: expect.any(String),
