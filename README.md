@@ -2,7 +2,7 @@
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/Erickrsrs/typescript-rest-api?style=for-the-badge)
 
-![img](https://prnt.sc/8rYG_ZVT4dqc)
+![img](typescript-api.png)
 
 > Rest API using node, typescript, express, mongoDB and jest
 
