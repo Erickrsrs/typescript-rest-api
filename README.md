@@ -1,41 +1,45 @@
-## Sequência de comandos e ações:
+# Node API REST with Typescript
 
-- npm init -y
-- git init
-- npm i typescript @types/node -D
-- .gitignore
-- tsconfig.json
-- _Para buildar:_ npx tsc
-- script: "build": "npx tsc"
+![GitHub repo size](https://img.shields.io/github/repo-size/Erickrsrs/typescript-rest-api?style=for-the-badge)
+
+![img](https://prnt.sc/8rYG_ZVT4dqc)
+
+> Rest API using node, typescript, express, mongoDB and jest
 
 ---
 
-#### Rodar automaticamente:
+## 💻 Getting Started
 
-- npm i ts-node nodemon -D
-- nodemon.json
-- script: "dev": "npx nodemon"
+Before you begin, check that you have met the following requirements:
 
-#### eslint
+- Latest version of `NodeJs`.
+- You have a database in `mongoDB`, you can do this for free from MongoDB Atlas.
+- Create .env in the root with the following variables:
+  - MONGO_URL: Your url mongoDB;
+  - TOKEN_SECRET and TOKEN_EXPIRATION: for functionalities of jwt.
 
-- npm i eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin -D
-- .eslintrc
-- .eslintignore
+---
 
-#### prettier
+## 🚀 Setup
 
-- npm i prettier -D
-- npm i eslint-config-prettier -D
-- .prettierrc
+Install dependencies:
 
-#### criar .env com:
+```
+npm i or yarn
+```
 
-- MONGO_URL
+Build (not necessary):
 
-#### controller methods:
+```
+npm run build
+```
 
-- index: lista todos os usuários -> GET
-- store/create: cria um novo usuário -> POST
-- delete: apaga um usuário -> DELETE
-- show: mostra um usuário -> GET
-- update: atualiza um usuário -> PATCH ou PUT
+Running:
+
+```
+npm run dev
+```
+
+You can see all other scripts on package.json.
+
+---
